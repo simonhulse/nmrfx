@@ -364,7 +364,7 @@ public class Processor {
             return openNV(fileName, null, writeable);
         } //        else if ("fid".equals(filetype)) {
         //            return openFID(fileName, null);
-        //        } 
+        //        }
         else {
             log.warn("Do not recognize filetype {}", filetype);
             return false;
@@ -1472,6 +1472,8 @@ public class Processor {
             runSimVecProcessor(simVecProcessor, dimProcesses);
         }
         long startTime = System.currentTimeMillis();
+        long startTimeProc;
+        float procTime;
         clearProcessorError();
         int nDimsProcessed = 0;
         for (ProcessOps p : dimProcesses) {
@@ -1485,7 +1487,7 @@ public class Processor {
                 mathObjectsWritten.set(0);
                 if (progressUpdater != null) {
                     int[] dims = p.getDims();
-                    String dimString = "dim ";
+                    String dimString;
                     if (p.isDataset()) {
                         dimString = "dataset";
                     } else {
@@ -1502,7 +1504,10 @@ public class Processor {
                 } else {
                     setDim(p.getDim());
                 }
+                startTimeProc = System.currentTimeMillis();
                 run(p);
+                procTime = (float) ((System.currentTimeMillis() - startTimeProc) / 1000.0);
+                log.info(String.format("Time elapsed for %s: %8.4f", p.getName(), procTime));
                 nDimsProcessed = Math.max(nDimsProcessed, p.getDim() + 1);
                 nvDataset = true;
             }
