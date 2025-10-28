@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.ConcurrentHashMap;
 
 @PluginAPI("ring")
 public class MoleculeBase implements Serializable, ITree {
@@ -336,7 +337,7 @@ public class MoleculeBase implements Serializable, ITree {
     public LinkedHashMap<String, Entity> chains;
     public LinkedHashMap<String, Entity> entityLabels = null;
     protected List<Integer> activeStructures = new CopyOnWriteArrayList<>();
-    Map<String, Atom> atomMap = new HashMap<>();
+    Map<String, Atom> atomMap = new ConcurrentHashMap<>();
     protected List<Atom> atoms = new ArrayList<>();
     protected List<Bond> bonds = new ArrayList<Bond>();
     private boolean atomArrayValid = false;
@@ -1766,7 +1767,7 @@ public class MoleculeBase implements Serializable, ITree {
             relaxationSetMap.put(entry.getKey().name(), entry.getKey());
         }
     }
-    
+
     public Map<String, OrderParSet> orderParSetMap() {
         if (orderParSetMap.isEmpty()) {
             updateOrderParMap();
